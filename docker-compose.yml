@@ -1,0 +1,33 @@
+version: '3.6'
+services:
+  web-app:
+    container_name: web-app
+    image: spring-prom-grafana:1.1
+    networks:
+      - metrics-nw
+    ports:
+      - 8585:8585
+    restart:
+      on-failure
+  metrics-prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    networks:
+      - metrics-nw
+    ports:
+      - 9090:9090
+    volumes:
+      - /c/usr/local/prometheus.yml:/etc/prometheus/prometheus.yml    
+    restart:
+      on-failure
+  metrics-grafana:
+    container_name: grafana
+    image: grafana/grafana
+    networks:
+      - metrics-nw
+    ports:
+      - 3000:3000
+    restart:
+      on-failure      
+networks:
+  metrics-nw: {}
